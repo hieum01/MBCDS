@@ -17,7 +17,8 @@ MBCDS(
   ratio.max.trace = 10 * trace,
   ties = "first",
   subsample = NULL,
-  pp.type = 7
+  pp.type = 7,
+  pr.i = 1
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ MBCDS(
 \item{subsample}{use subsample draws of size n.tau to calculate empirical quantiles; if NULL, calculate normally}
 
 \item{pp.type}{type of plotting position used in quantile (defaults to 7)}
+
+\item{pr.i}{Index of precipitation variable}
 }
 \value{
 mhat.h Array of bias corrected m.h values for the historical period
