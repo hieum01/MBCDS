@@ -131,11 +131,6 @@ MBCDS <-
     m.h.hat[m.h.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
     m.f.hat[m.f.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
     list(mhat.h=m.h.hat, mhat.p=m.f.hat)
-    }
-
-    m.c.hat[m.c.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
-    m.f.hat[m.f.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
-    list(mhat.h=m.h.hat, mhat.p=m.f.hat)
   }
 
 ################################################################################
