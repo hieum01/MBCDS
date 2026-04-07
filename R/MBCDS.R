@@ -26,6 +26,7 @@
 #' @param ties Method used to handle ties when calculating ordinal ranks (defaults to 'first')
 #' @param subsample use subsample draws of size n.tau to calculate empirical quantiles; if NULL, calculate normally
 #' @param pp.type type of plotting position used in quantile (defaults to 7)
+#' @param pr.i Index of precipitation variable
 #'
 #' @return mhat.h Array of bias corrected m.h values for the historical period
 #' @return mhat.p Array of bias corrected m.p values for the projection period
@@ -36,7 +37,7 @@
 MBCDS <-
   function(o.h, m.h, m.f,ratio.seq=rep(FALSE, ncol(o.h)),trace=0.05,
            trace.calc=0.01, jitter.factor=0, n.tau=NULL, ratio.max=2,
-           ratio.max.trace=10*trace, ties='first',subsample=NULL, pp.type=7) {
+           ratio.max.trace=10*trace, ties='first',subsample=NULL, pp.type=7,pr.i=1) {
 
     ratio.col<-which(ratio.seq)
     Threshold_Pr<-trace.calc
@@ -71,12 +72,12 @@ MBCDS <-
     #=========================================================================================
     #Jitter to numbers of zero for ratio variables (e.g., precipitation)
     epsilon <- .Machine$double.eps
-    o.h[o.h[,ratio.col] < Threshold_Pr,ratio.col] <- runif(sum(o.h[,ratio.col] < Threshold_Pr), min=epsilon,
-                                                           max=Threshold_Pr)
-    m.h[m.h[,ratio.col] < Threshold_Pr,ratio.col] <- runif(sum(m.h[,ratio.col] < Threshold_Pr), min=epsilon,
-                                                           max=Threshold_Pr)
-    m.f[m.f[,ratio.col] < Threshold_Pr,ratio.col] <- runif(sum(m.f[,ratio.col] < Threshold_Pr), min=epsilon,
-                                                           max=Threshold_Pr)
+    o.c[o.c[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(o.c[,pr.i] < Threshold_Pr), min=epsilon,
+                                                 max=Threshold_Pr)
+    m.c[m.c[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(m.c[,pr.i] < Threshold_Pr), min=epsilon,
+                                                 max=Threshold_Pr)
+    m.f[m.f[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(m.f[,pr.i] < Threshold_Pr), min=epsilon,
+                                                 max=Threshold_Pr)
     #=========================================================================================
     Ncol<-ncol(o.h)
     Nrow<-nrow(o.h)
@@ -127,8 +128,8 @@ MBCDS <-
       m.f.hat[,i] <- sort(m.f[,i])[rank(W_m.f.hat[,i])]
     }
 
-    m.h.hat[m.h.hat[,ratio.col] < Threshold_Pr,ratio.col] <- 0.0
-    m.f.hat[m.f.hat[,ratio.col] < Threshold_Pr,ratio.col] <- 0.0
+    m.c.hat[m.c.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
+    m.f.hat[m.f.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
     list(mhat.h=m.h.hat, mhat.p=m.f.hat)
   }
 
