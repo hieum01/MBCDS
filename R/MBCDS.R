@@ -72,9 +72,9 @@ MBCDS <-
     #=========================================================================================
     #Jitter to numbers of zero for ratio variables (e.g., precipitation)
     epsilon <- .Machine$double.eps
-    o.c[o.c[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(o.c[,pr.i] < Threshold_Pr), min=epsilon,
+    o.h[o.h[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(o.h[,pr.i] < Threshold_Pr), min=epsilon,
                                                  max=Threshold_Pr)
-    m.c[m.c[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(m.c[,pr.i] < Threshold_Pr), min=epsilon,
+    m.h[m.h[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(m.h[,pr.i] < Threshold_Pr), min=epsilon,
                                                  max=Threshold_Pr)
     m.f[m.f[,pr.i] < Threshold_Pr,pr.i] <- runif(sum(m.f[,pr.i] < Threshold_Pr), min=epsilon,
                                                  max=Threshold_Pr)
@@ -126,6 +126,11 @@ MBCDS <-
       # Replace ordinal ranks with the original data
       m.h.hat[,i] <- sort(m.h[,i])[rank(W_m.h.hat[,i])]
       m.f.hat[,i] <- sort(m.f[,i])[rank(W_m.f.hat[,i])]
+    }
+
+    m.h.hat[m.h.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
+    m.f.hat[m.f.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
+    list(mhat.h=m.h.hat, mhat.p=m.f.hat)
     }
 
     m.c.hat[m.c.hat[,pr.i] < Threshold_Pr,pr.i] <- 0.0
