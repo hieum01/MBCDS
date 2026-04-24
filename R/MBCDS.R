@@ -27,6 +27,8 @@
 #' @param subsample use subsample draws of size n.tau to calculate empirical quantiles; if NULL, calculate normally
 #' @param pp.type type of plotting position used in quantile (defaults to 7)
 #' @param pr.i Index of precipitation variable
+#' @param WF Index of weather forecast (operational). For climate change projection, WF=F.
+#' @param upper.tail.seq Array of logical values indicating if probability for extremes are estimated from the upper tail or both tails. TRUE: variables with zero minimum bound (e.g., precipitatin and wind), FALSE: Temperature
 #'
 #' @return mhat.h Array of bias corrected m.h values for the historical period
 #' @return mhat.p Array of bias corrected m.p values for the projection period
@@ -37,7 +39,7 @@
 MBCDS <-
   function(o.h, m.h, m.f,ratio.seq=rep(FALSE, ncol(o.h)),trace=0.05,
            trace.calc=0.01, jitter.factor=0, n.tau=NULL, ratio.max=2,
-           ratio.max.trace=10*trace, ties='first',subsample=NULL, pp.type=7,pr.i=1) {
+           ratio.max.trace=10*trace, ties='first',subsample=NULL, pp.type=7,pr.i=1,WF=F,upper.tail.seq=rep(TRUE, ncol(o.h))) {
 
     ratio.col<-which(ratio.seq)
     Threshold_Pr<-trace.calc
@@ -57,12 +59,22 @@ MBCDS <-
     m.f.qmap <- m.f
     # Quantile delta mapping bias correction
     for(i in seq(ncol(o.h))){
-      fit.qmap <- QDM(o.h=o.h[,i], m.h=m.h[,i], m.p=m.f[,i],
-                      ratio=ratio.seq[i], trace.calc=trace.calc[i],
-                      trace=trace[i], jitter.factor=jitter.factor[i],
-                      n.tau=n.tau, ratio.max=ratio.max[i],
-                      ratio.max.trace=ratio.max.trace[i],
-                      subsample=subsample, pp.type=pp.type)
+      if (WF) {
+        fit.qmap <- BC_Forecasts_Tails(o.h=o.h[,i], m.h=m.h[,i], m.p=m.f[,i],
+                        ratio=ratio.seq[i], trace.calc=trace.calc[i],
+                        trace=trace[i], jitter.factor=jitter.factor[i],
+                        n.tau=n.tau, ratio.max=ratio.max[i],
+                        ratio.max.trace=ratio.max.trace[i],
+                        subsample=subsample, pp.type=pp.type,upper.tail=upper.tail.seq)
+      } else {
+        fit.qmap <- QDM(o.h=o.h[,i], m.h=m.h[,i], m.p=m.f[,i],
+                        ratio=ratio.seq[i], trace.calc=trace.calc[i],
+                        trace=trace[i], jitter.factor=jitter.factor[i],
+                        n.tau=n.tau, ratio.max=ratio.max[i],
+                        ratio.max.trace=ratio.max.trace[i],
+                        subsample=subsample, pp.type=pp.type)
+      }
+
       m.h.qmap[,i] <- fit.qmap$mhat.h
       m.f.qmap[,i] <- fit.qmap$mhat.p
     }
