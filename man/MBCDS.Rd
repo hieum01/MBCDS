@@ -18,7 +18,9 @@ MBCDS(
   ties = "first",
   subsample = NULL,
   pp.type = 7,
-  pr.i = 1
+  pr.i = 1,
+  WF = F,
+  upper.tail.seq = rep(TRUE, ncol(o.h))
 )
 }
 \arguments{
@@ -49,6 +51,10 @@ MBCDS(
 \item{pp.type}{type of plotting position used in quantile (defaults to 7)}
 
 \item{pr.i}{Index of precipitation variable}
+
+\item{WF}{Index of weather forecast (operational). For climate change projection, WF=F.}
+
+\item{upper.tail.seq}{Array of logical values indicating if probability for extremes are estimated from the upper tail or both tails. TRUE: variables with zero minimum bound (e.g., precipitatin and wind), FALSE: Temperature}
 }
 \value{
 mhat.h Array of bias corrected m.h values for the historical period
