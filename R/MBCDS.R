@@ -1,10 +1,12 @@
 #' Multivariate Bias Correction with Distribution-free Shuffle approach (MBCDS)
 #'@description
 #' MBCDS bias correction for preserving relative changes in quantiles and interdependence between climate variables
+#' MBCDS is also to bias-correct clmate variables considering extremes beyond a range of historical data for forecasts.
 #'
 #'@details
-#' QDM is applied to bias-corrrect GCM outputs and Distribution-free Shuffle is used for preserving interdependence between climate variables.
+#' For climate change projections, QDM is applied to bias-corrrect GCM outputs and Distribution-free Shuffle is used for preserving interdependence between climate variables.
 #' The struture of arguments are exactly same as QDM except for multi-variables (array or matrix) of o.h, m.h, and m.p while they are vectors (univariate).
+#' For subseasonal or seasonal forecasts, a hybrid Quantile Mapping (QM) with non-parametric and parametric approaches is applied to bias-correct forecased extremes beyond a range of hindcast and historcal data.
 #'
 #' @references
 #' MBCDS:
