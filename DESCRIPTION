@@ -1,10 +1,10 @@
 Package: MBCDS
 Type: Package
-Title: Multivariate bias correction/Distribution-free Shuffle approach
-Version: 1.0.0
+Title: Multivariate bias correction/Distribution-free Shuffle approach for operational forecasts and climate change
+Version: 2.0.0
 Author: Hyung Eum
 Maintainer: Hyung Eum <hyung.eum@gov.ab.ca>
-Description: Bias-correction preserving GCM-driven relative changes and interdependence structure between climate variables
+Description: Bias-correction preserving GCM-driven relative changes and interdependence structure between climate variables for operational forecasts and climate change projections
 License: 
 Encoding: UTF-8
 LazyData: true
