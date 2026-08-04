@@ -62,12 +62,12 @@ MBCDS <-
     # Quantile delta mapping bias correction
     for(i in seq(ncol(o.h))){
       if (WF) {
-        fit.qmap <- BC_Forecasts_Tails(o.h=o.h[,i], m.h=m.h[,i], m.p=m.f[,i],
+        fit.qmap <- BC_Forecasts_Tails(o.h=o.h[,i], m.h=m.h[,i], m.f=m.f[,i],
                         ratio=ratio.seq[i], trace.calc=trace.calc[i],
                         trace=trace[i], jitter.factor=jitter.factor[i],
                         n.tau=n.tau, ratio.max=ratio.max[i],
                         ratio.max.trace=ratio.max.trace[i],
-                        subsample=subsample, pp.type=pp.type,upper.tail=upper.tail.seq)
+                        subsample=subsample, pp.type=pp.type,upper.tail=upper.tail.seq[i])
       } else {
         fit.qmap <- QDM(o.h=o.h[,i], m.h=m.h[,i], m.p=m.f[,i],
                         ratio=ratio.seq[i], trace.calc=trace.calc[i],
