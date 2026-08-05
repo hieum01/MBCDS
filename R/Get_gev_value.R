@@ -14,17 +14,17 @@
 #' @return Inverse GEV values for given probability
 #' @export
 
-get_gev_value <- function(tau, sample_data,upper=T) {
+get_gev_value <- function(tau, sample_data,threshold.upper=0.9, threshold.lower=0.1,upper=T) {
   library(extRemes)
   if (upper) {
-    threshold <- quantile(sample_data, 0.9, na.rm = TRUE)
+    threshold <- quantile(sample_data, threshold.upper, na.rm = TRUE)
     tail_data <- sample_data[sample_data > threshold]
   } else {
-    threshold <- quantile(sample_data, 0.1, na.rm = TRUE)
+    threshold <- quantile(sample_data, threshold.lower, na.rm = TRUE)
     tail_data <- sample_data[sample_data < threshold]
   }
 
-  fit <- fevd(tail_data, type = "GEV", method = "MLE")
+  fit <- fevd(tail_data, type = "GEV", method = "Lmoments")
   params <- distill(fit)
 
   # Use qevd (Quantile function for EVD) to calculate the value for tau
