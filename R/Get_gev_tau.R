@@ -47,13 +47,11 @@ get_gev_tau <- function(y_val, sample_data,threshold.upper=0.9, threshold.lower=
                            type = "GEV")
   if(max(tau_extrapolated1)>0) {
     tau_extrapolated=tau_extrapolated1
-   } else if (max(tau_extrapolated2)>0) {
-      tau_extrapolated=tau_extrapolated2  
-      
-    } else {
+  } else if (max(tau_extrapolated2)>0) {
+    tau_extrapolated=tau_extrapolated2  
+  } else {
     tau_extrapolated=rep(0.001,length(y_val))
-    
-    }
+  }
   return(tau_extrapolated)
 }
 
