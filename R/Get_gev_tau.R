@@ -46,8 +46,12 @@ get_gev_tau <- function(y_val, sample_data,threshold.upper=0.9, threshold.lower=
                            shape = params2["shape"],
                            type = "GEV")
   if(max(tau_extrapolated1)>0) {
+    tau_extrapolated1[tau_extrapolated1>1.0]<-0.999
+    tau_extrapolated1[tau_extrapolated1<=0.0]<-0.001
     tau_extrapolated=tau_extrapolated1
   } else if (max(tau_extrapolated2)>0) {
+    tau_extrapolated2[tau_extrapolated2>1.0]<-0.999
+    tau_extrapolated2[tau_extrapolated2<=0.0]<-0.001
     tau_extrapolated=tau_extrapolated2  
   } else {
     tau_extrapolated=rep(0.001,length(y_val))
