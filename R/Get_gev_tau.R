@@ -15,29 +15,43 @@
 #' @return tau_extrapolated: Estimated probability for the given extreme values
 #' @export
 
-get_gev_tau <- function(y_val, sample_data, upper=T) {
+get_gev_tau <- function(y_val, sample_data,threshold.upper=0.9, threshold.lower=0.1,upper=T) {
   library(extRemes)
   # Fit to the top 10% of the data to characterize the tail behavior
   if (upper) {
-    threshold <- quantile(sample_data, 0.9, na.rm = TRUE)
+    threshold <- quantile(sample_data, threshold.upper, na.rm = TRUE)
     tail_data <- sample_data[sample_data > threshold]
   } else {
-    threshold <- quantile(sample_data, 0.1, na.rm = TRUE)
+    threshold <- quantile(sample_data, threshold.lower, na.rm = TRUE)
     tail_data <- sample_data[sample_data < threshold]
   }
 
   # Fit GEV using Maximum Likelihood Estimation (MLE) [cite: 558, 568]
   # type = "GEV" specifies the Generalized Extreme Value distribution [cite: 814]
-  fit <- fevd(tail_data, type = "GEV", method = "MLE")
-  params <- distill(fit)
+  fit1 <- fevd(tail_data, type = "GEV", method = "Lmoments")
+  fit2 <- fevd(tail_data, type = "GEV", method = "MLE")
+  params1 <- distill(fit1)
+  params2 <- distill(fit2)
 
   # Use pevd (Probability function for EVD) to calculate F(x)
   # This corresponds to G(x; mu, sigma, xi) in the paper
-  tau_extrapolated <- pevd(y_val,
-                           loc = params["location"],
-                           scale = params["scale"],
-                           shape = params["shape"],
+  tau_extrapolated1 <- pevd(y_val,
+                           loc = params1["location"],
+                           scale = params1["scale"],
+                           shape = params1["shape"],
                            type = "GEV")
+  tau_extrapolated2 <- pevd(y_val,
+                           loc = params2["location"],
+                           scale = params2["scale"],
+                           shape = params2["shape"],
+                           type = "GEV")
+  if(max(tau_extrapolated1)>0) {
+    tau_extrapolated=tau_extrapolated1
+    } else if (max(tau_extrapolated2)>0) {
+      tau_extrapolated=tau_extrapolated2  
+    } else {
+    tau_extrapolated=rep(0.001,length(y_val))
+    }
   return(tau_extrapolated)
 }
 
