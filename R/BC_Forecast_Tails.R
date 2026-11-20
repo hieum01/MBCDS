@@ -63,7 +63,7 @@ BC_Forecasts_Tails <-function(o.h, m.h,m.f, ratio=FALSE, trace=0.05, trace.calc=
     }
     # Calculate empirical quantiles
     n.h <- length(m.h)
-    n.obs <- length(m.o)
+    n.obs <- length(o.h)
     n.f <- length(m.f)
     if(is.null(n.tau)) {
        n.tau.h <- n.h
