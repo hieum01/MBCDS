@@ -62,9 +62,16 @@ BC_Forecasts_Tails <-function(o.h, m.h,m.f, ratio=FALSE, trace=0.05, trace.calc=
                                      max=trace.calc)
     }
     # Calculate empirical quantiles
-    n <- length(m.h)
-    if(is.null(n.tau)) n.tau <- n
-    tau <- seq(0, 1, length=n.tau)
+    n.h <- length(m.h)
+    n.obs <- length(m.o)
+    n.f <- length(m.f)
+    if(is.null(n.tau)) {
+       n.tau.h <- n.h
+       n.tau.o <- n.obs
+       n.tau.f <- n.f
+    }
+    tau <- seq(0, 1, length=n.tau.o)
+    tau.f <- seq(0, 1, length=n.tau.f)
     if(!is.null(subsample)){
       quant.o.h <- rowMeans(apply(replicate(subsample,
                                             sample(o.h, size=length(tau))),
@@ -73,12 +80,12 @@ BC_Forecasts_Tails <-function(o.h, m.h,m.f, ratio=FALSE, trace=0.05, trace.calc=
                                             sample(m.h, size=length(tau))),
                                   2, quantile, probs=tau, type=pp.type))
       # quant.m.f <- rowMeans(apply(replicate(subsample,
-      #                                       sample(m.h, size=length(tau))),
+      #                                       sample(m.h, size=length(tau.f))),
       #                             2, quantile, probs=tau, type=pp.type))
     } else{
       quant.o.h <- quantile(o.h, tau, type=pp.type)
       quant.m.h <- quantile(m.h, tau, type=pp.type)
-      #quant.m.f <- quantile(m.f, tau, type=pp.type)
+      #quant.m.f <- quantile(m.f, tau.f, type=pp.type)
     }
     # Apply quantile mapping bias correction
 
